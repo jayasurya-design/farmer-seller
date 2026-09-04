@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A simple farmer to shopkeeper vegetable marketplace.">
+  <title>Harvest Link | Vegetable Marketplace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://www.gstatic.com/firebasejs/12.18.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore-compat.js"></script>
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="Harvest Link home"><span class="brand-mark">HL</span><span>Harvest Link</span></a>
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="#market">Marketplace</a>
+      <a href="#farmer-tools">Farmer tools</a>
+      <a href="#orders">Orders</a>
+    </nav>
+    <span class="connection-status" id="connectionStatus">Connecting...</span>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Local produce, direct connection</p>
+        <h1>Fresh harvests,<br><em>closer to home.</em></h1>
+        <p class="hero-text">A calm, simple marketplace where farmers share today's vegetables and shopkeepers buy with confidence.</p>
+        <a class="button button-primary" href="#market">Browse today's harvest <span aria-hidden="true">&#8594;</span></a>
+      </div>
+      <div class="hero-art" aria-label="Illustration of a market basket with fresh vegetables" role="img">
+        <span class="sun"></span><span class="leaf leaf-one"></span><span class="leaf leaf-two"></span>
+        <div class="basket"><span class="vegetable tomato"></span><span class="vegetable carrot"></span><span class="vegetable pumpkin"></span><span class="vegetable cabbage"></span></div>
+        <p>Grown nearby.<br>Shared simply.</p>
+      </div>
+    </section>
+
+    <section class="workspace" id="farmer-tools">
+      <div class="section-heading"><div><p class="eyebrow">For farmers</p><h2>Put your harvest<br>on the board.</h2></div><p>Register once, then add what is ready to move today.</p></div>
+      <div class="tool-grid">
+        <form class="panel form-panel" id="farmerForm">
+          <div class="panel-heading"><span class="step">01</span><div><h3>Farmer registration</h3><p>Your details help shopkeepers know who grew their produce.</p></div></div>
+          <label for="farmerName">Full name</label><input id="farmerName" name="farmerName" type="text" placeholder="e.g. Meera Patel" required>
+          <label for="farmName">Farm name</label><input id="farmName" name="farmName" type="text" placeholder="e.g. Green Valley Farm" required>
+          <label for="farmerPhone">Phone number</label><input id="farmerPhone" name="farmerPhone" type="tel" placeholder="e.g. 98765 43210" required>
+          <button class="button button-dark" type="submit">Save farmer profile</button><p class="form-message" id="farmerMessage" role="status"></p>
+        </form>
+        <form class="panel form-panel" id="vegetableForm">
+          <div class="panel-heading"><span class="step">02</span><div><h3>Add vegetables</h3><p>Make your available produce visible to local buyers.</p></div></div>
+          <label for="vegetableName">Vegetable</label><input id="vegetableName" name="vegetableName" type="text" placeholder="e.g. Tomatoes" required>
+          <div class="field-row"><div><label for="quantity">Quantity (kg)</label><input id="quantity" name="quantity" type="number" min="1" step="0.5" placeholder="20" required></div><div><label for="price">Price per kg (&#8377;)</label><input id="price" name="price" type="number" min="1" step="0.01" placeholder="45" required></div></div>
+          <label for="harvestDate">Harvest date</label><input id="harvestDate" name="harvestDate" type="date" required>
+          <button class="button button-primary" type="submit">List this harvest</button><p class="form-message" id="vegetableMessage" role="status"></p>
+        </form>
+      </div>
+    </section>
+
+    <section class="market-section" id="market">
+      <div class="section-heading market-heading"><div><p class="eyebrow">For shopkeepers</p><h2>Today's harvest</h2></div><button class="button button-outline" id="refreshButton" type="button">Refresh listings</button></div>
+      <div class="listing-grid" id="listingGrid"><div class="loading-state">Loading the latest harvests...</div></div>
+    </section>
+
+    <section class="orders-section" id="orders">
+      <div class="section-heading"><div><p class="eyebrow">Keep it moving</p><h2>Recent orders</h2></div><p>Farmers can track requests here after a shopkeeper places an order.</p></div>
+      <div class="orders-list" id="ordersList"><div class="loading-state">Loading recent orders...</div></div>
+    </section>
+  </main>
+  <footer><span>Harvest Link</span><span>Direct from local farms</span></footer>
+
+  <dialog id="orderDialog" class="order-dialog">
+    <form method="dialog" id="orderForm" class="dialog-content">
+      <button class="dialog-close" value="cancel" aria-label="Close order form">&times;</button>
+      <p class="eyebrow">Place an order</p><h2 id="dialogTitle">Order vegetables</h2><p id="dialogFarmer" class="muted"></p>
+      <input type="hidden" id="orderVegetableId"><label for="shopkeeperName">Shopkeeper name</label><input id="shopkeeperName" type="text" placeholder="e.g. Sunrise Grocers" required>
+      <label for="orderQuantity">Quantity (kg)</label><input id="orderQuantity" type="number" min="1" step="0.5" required>
+      <label for="shopkeeperPhone">Contact number</label><input id="shopkeeperPhone" type="tel" placeholder="e.g. 98765 43210" required>
+      <button class="button button-primary" value="default" type="submit">Send order request</button><p class="form-message" id="orderMessage" role="status"></p>
+    </form>
+  </dialog>
+</body>
+</html>
